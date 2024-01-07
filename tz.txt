@@ -1,0 +1,86 @@
+BBR
+User
+    f_name 
+    s_name  'Otchestva'
+    l_name
+    phone_num
+    type = choes {
+                    Super
+                    admin
+                    head teacher
+                }
+    birthday 
+    passport ser
+    passport JSHSHR
+    created
+
+
+Subject
+    title
+    
+
+Teacher
+    f_name
+    s_name
+    l_name
+    Avatar 
+    phone_num
+    birthday 
+    passport ser
+    passport JSHSHR
+    created
+    Subject = MTM
+
+
+Class
+    title
+    created
+    Teacher = one to one
+
+
+
+Pupil
+    f_name
+    s_name
+    l_name
+    met ser
+    Class = OTO
+    
+
+
+Finger Print
+    arrived
+    left
+    person
+
+Monitoring
+    Class FK
+    Pupil = FK
+    Subject = FK
+    grade
+    data
+    File 
+
+
+Table
+    Teacher = FK
+    Subject = FK
+    start
+    end
+    status = BF
+
+
+Lesson Time
+    enter
+    epsont
+    leate
+    Pupil
+    Teacher
+
+
+About Teacher
+    video
+    photo
+    degry
+    certificat
+    Teacher
