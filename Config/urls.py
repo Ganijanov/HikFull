@@ -24,4 +24,5 @@ urlpatterns = [
     path('bot/',include('bot.urls')),
     path('main/',include('main.urls')),
     path('log-in-out/',include('log-in-out.urls')),
+    path('dashboard/',include('dashboard.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

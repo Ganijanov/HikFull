@@ -1,7 +1,31 @@
 # B.B.R
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractUser, AbstractBaseUser, BaseUserManager, PermissionsMixin, User, Group, Permission
 from  .iqrouser import CustomUserManager
+
+
+class AdminUser(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(max_length=255, unique=True)
+    password = models.CharField(max_length=255)
+    email = models.EmailField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=True)
+    objects = CustomUserManager()
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    phone_num = models.CharField(max_length=255)
+    
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = []
+
+    class Meta():
+        db_table = 'admin_user'
+
+            
+    def __str__(self):
+        return f'{self.first_name} {self.s_name}  {self.last_name}'
+    
 
 class Subject(models.Model):
     subject_name = models.CharField(max_length=255, blank=True, null=True)
@@ -10,14 +34,32 @@ class Subject(models.Model):
         return self.subject_name
 
 
-class IqroUser(AbstractBaseUser, PermissionsMixin):
+class School(models.Model):
+    name = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+
+
+class IqroUser(AbstractUser):
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name='iqro_user_permissions',
+        verbose_name='user permissions',
+        blank=True,
+    )
+    groups = models.ManyToManyField(
+        Group,
+        related_name='iqro_user_groups',
+        verbose_name='groups',
+        blank=True,
+        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
+    )
+    school = models.ForeignKey(School, on_delete=models.SET_NULL, related_name="school", null=True)
     username = models.CharField(max_length=255, unique=True)
+    password = models.CharField(max_length=255)
     email = models.EmailField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-
-    objects = CustomUserManager()
-    # Otchestva
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     s_name = models.CharField(max_length=255, blank=True, null=True)
@@ -32,16 +74,8 @@ class IqroUser(AbstractBaseUser, PermissionsMixin):
     finger_id = models.CharField(max_length=255, unique=True)
     telegram = models.CharField(max_length=255)
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = []
 
-    class Meta():
-        db_table = 'iqro_user'
 
-            
-    def __str__(self):
-        return f'{self.first_name} {self.s_name}  {self.last_name}'
-    
 
 class Cla_ss(models.Model):
     title = models.CharField(max_length=255)

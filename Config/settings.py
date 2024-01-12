@@ -71,7 +71,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Config.wsgi.application'
-AUTH_USER_MODEL = 'main.IqroUser'
+AUTH_USER_MODEL = 'main.AdminUser'
 
 
 # Database
