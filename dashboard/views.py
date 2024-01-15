@@ -7,6 +7,60 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 
+@api_view(['GET'])
+def list_school(request):
+    schools = models.School.objects.all()
+    serializer = serializers.SchoolSer(schools, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def crt_schl(request):
+    if request.user.is_superuser:
+        try:
+            models.School.objects.create(
+                name = request.data['name'], 
+                city = request.data['city'],
+                about = request.data['about'],
+                address = request.data['address'],
+            )
+            res = {'status':'Created school'}
+        except:
+            res = {'status':'Samething get wrong'}
+    else:
+        res = {'status':'You have not access:('}
+    return Response(res)
+
+
+def upd_schl(request, id):
+    school = models.School.objects.get(id)
+    if request.user.is_superuser or school.school == request.user:
+        try:
+            school.name = request.data['name'] 
+            school.city = request.data['city']
+            school.about = request.data['about']
+            school.address = request.data['address']
+            school.save()
+            res = {'status':'Updated school'}
+        except:
+            res = {'status':'Samething get wrong'}
+    else:
+        res = {'status':'You have not access:('}
+    return Response(res)
+
+
+def d_schl(request, id):
+    school = models.School.objects.get(id)
+    if request.user.is_superuser:
+        try:
+            school.delete()
+            res = {'status':'Deleted school'}
+        except:
+            res = {'status':'Samething get wrong'}
+    else:
+        res = {'status':'You have not access:('}
+    return Response(res)
+
 
 @api_view(['GET'])
 def list_users(request):
@@ -21,6 +75,7 @@ def create_user(request):
     if request.user.is_superuser:
         try:
             models.IqroUser.objects.create(
+            school = models.School.objects.get(id=request.data['school_id']),
             username = request.data['username'],
             password = request.data['password'],
             email = request.data['email'],
@@ -50,6 +105,7 @@ def upgruser(request, id):
     user = models.IqroUser.objects.get(id=id)
     if request.user.is_superuser or request.user == user:
         try:
+            user.school = models.School.objects.get(id=request.data['school_id'])
             user.username = request.data['username']
             user.password = request.data['password']
             user.email = request.data['email']

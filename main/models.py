@@ -24,20 +24,25 @@ class AdminUser(AbstractBaseUser, PermissionsMixin):
 
             
     def __str__(self):
-        return f'{self.first_name} {self.s_name}  {self.last_name}'
-    
-
-class Subject(models.Model):
-    subject_name = models.CharField(max_length=255, blank=True, null=True)
-
-    def __str__(self):
-        return self.subject_name
+        return f'{self.first_name} {self.last_name}'
 
 
 class School(models.Model):
     name = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
+    about = models.TextField()
     address = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
+class Subject(models.Model):
+    subject_name = models.CharField(max_length=255, blank=True, null=True)
+    school =  models.ForeignKey(School, on_delete=models.CASCADE, related_name="school_subject")
+
+    def __str__(self):
+        return self.subject_name
 
 
 class IqroUser(AbstractUser):
@@ -54,7 +59,7 @@ class IqroUser(AbstractUser):
         blank=True,
         help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
     )
-    school = models.ForeignKey(School, on_delete=models.SET_NULL, related_name="school", null=True)
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="school")
     username = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
     email = models.EmailField(blank=True, null=True)
@@ -74,6 +79,8 @@ class IqroUser(AbstractUser):
     finger_id = models.CharField(max_length=255, unique=True)
     telegram = models.CharField(max_length=255)
 
+    def __str__(self):
+        return f'{self.first_name} {self.last_name} {self.school.name}'
 
 
 
@@ -81,6 +88,7 @@ class Cla_ss(models.Model):
     title = models.CharField(max_length=255)
     created = models.DateTimeField(auto_now_add=True)
     teacher = models.OneToOneField(IqroUser, on_delete=models.CASCADE, related_name='class_teacher')
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="school_class")
 
     def __str__(self):
         return self.title
@@ -93,7 +101,9 @@ class Pupil(models.Model):
     cla_ss = models.ForeignKey(Cla_ss, on_delete=models.CASCADE, related_name='class_pupil')
     finger_id = models.CharField(max_length=255, unique=True)
     telegram = models.CharField(max_length=255)
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="school_pupil")
      
+
     def __str__(self):
         return f"{self.f_name} {self.l_name}"
     
