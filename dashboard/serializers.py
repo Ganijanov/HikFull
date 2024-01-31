@@ -7,7 +7,19 @@ class ListUserSer(serializers.ModelSerializer):
         fields = "__all__"
         
 
+class SubSer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Subject
+        fields = "__all__"
+
+
 class SchoolSer(serializers.ModelSerializer):
     class Meta:
         model = models.School
+        fields = "__all__"
+
+
+class ClasSer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Cla_ss
         fields = "__all__"

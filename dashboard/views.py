@@ -32,6 +32,7 @@ def crt_schl(request):
     return Response(res)
 
 
+@api_view(['PUT'])
 def upd_schl(request, id):
     school = models.School.objects.get(id)
     if request.user.is_superuser or school.school == request.user:
@@ -49,6 +50,7 @@ def upd_schl(request, id):
     return Response(res)
 
 
+@api_view(['GET'])
 def d_schl(request, id):
     school = models.School.objects.get(id)
     if request.user.is_superuser:
@@ -62,6 +64,60 @@ def d_schl(request, id):
     return Response(res)
 
 
+@api_view(['GET'])
+def list_subject(request):
+    subject = models.Subject.objects.all()
+    serializer = serializers.SubSer(subject, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def cr_sbjct(request):
+    if request.user.is_superuser:
+        try:
+            models.Subject.objects.create(
+                subject_name = request.data['subject_name'],
+                school = models.School.objects.get(id=request.data['school_id']),
+            )
+            res = {'status':'Created Subject'}
+        except:
+            res = {'status':'Samething get wrong'}
+    else:
+        res = {'status':'You have not access:('}
+    return Response(res)
+
+
+@api_view(['PUT'])
+def upd_sbjct(request, id):
+    subject = models.Subject.objects.get(id=id)
+    if request.user.is_superuser or subject.teacher == request.user:
+        try:
+            subject.subject_name = request.data['subject_name']
+            subject.school = models.School.objects.get(id=request.data['school_id'])
+            subject.save()
+
+            res = {'status':'Updated Subject'}
+        except:
+            res = {'status':'Samething get wrong'}
+    else:
+        res = {'status':'You have not access:('}
+    return Response(res)
+
+
+@api_view(['GET'])
+def del_sub(request, id):
+    subject = models.Subject.objects.get(id=id)
+    if request.user.is_superuser or subject.teacher == request.user:
+        try:
+            subject.delete()
+            res = {'status':'Delated Subject'}
+        except:
+            res = {'status':'Samething get wrong'}
+    else:
+        res = {'status':'You have not access:('}
+    return Response(res)
+
+    
 @api_view(['GET'])
 def list_users(request):
     users = models.IqroUser.objects.all()
@@ -99,6 +155,7 @@ def create_user(request):
     else:
         res = {'status':'You have not access:('}
     return Response(res)
+
 
 @api_view(['PUT'])
 def upgruser(request, id):
@@ -142,4 +199,28 @@ def del_user(request, id):
             res = {"status": "You have not access:("}
     except:
             res = {'status':'Samething get wrong'}      
+    return Response(res)
+
+
+@api_view(["GET"])
+def list_class(request):
+    clas = models.Cla_ss.objects.all()
+    serializer = serializers.ClasSer(clas, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+def crt_clss(request):
+    if request.is_superuser:
+        try:
+            models.Cla_ss.objects.create(
+            title = request.data['title'],
+            teacher = models.IqroUser.objects.get(id=request.data['teacher']),
+            school = models.School.objects.get(id=request.data['school_class'])
+            )
+            res = {"status": "Create"}
+        except:
+                res = {'status':'Samething get wrong'}      
+    else:
+            res = {"status": "You have not access:("}
     return Response(res)

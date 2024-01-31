@@ -69,19 +69,17 @@ class IqroUser(AbstractUser):
     last_name = models.CharField(max_length=255)
     s_name = models.CharField(max_length=255, blank=True, null=True)
     phone_num = models.CharField(max_length=255)
-    
     type = models.SmallIntegerField(choices=(( 1,"Super"),(2,'admin'),(3,'head teacher'),(4,'teacher')) )
     birthday = models.DateField()
     passport_ser = models.CharField(max_length=255, unique=True)
     passport_JSHSHR = models.IntegerField(unique=True)
     created = models.DateTimeField(auto_now_add=True)
-    Subject = models.ManyToManyField(Subject, related_name='teacher', default=None)
+    subject = models.ManyToManyField(Subject, related_name='teacher', default=None)
     finger_id = models.CharField(max_length=255, unique=True)
     telegram = models.CharField(max_length=255)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name} {self.school.name}'
-
 
 
 class Cla_ss(models.Model):
@@ -94,6 +92,21 @@ class Cla_ss(models.Model):
         return self.title
 
 
+class PayHis(models.Model):
+    pass
+
+
+
+class Parent(models.Model):
+    who = models.CharField(max_length=255)
+    grf = models.IntegerField()
+    phone = models.CharField(max_length=255)
+    chek = models.ForeignKey(PayHis, on_delete=models.CASCADE, related_name='payhis')
+    
+    def __str__(self):
+        return self.who
+
+
 class Pupil(models.Model):
     f_name = models.CharField(max_length=255)
     s_name = models.CharField(max_length=255, null=True, blank=True)
@@ -102,7 +115,7 @@ class Pupil(models.Model):
     finger_id = models.CharField(max_length=255, unique=True)
     telegram = models.CharField(max_length=255)
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="school_pupil")
-     
+    parent = models.ForeignKey(Parent, on_delete=models.SET_NULL, related_name="parent")
 
     def __str__(self):
         return f"{self.f_name} {self.l_name}"
@@ -164,4 +177,5 @@ class AboutTeacher(models.Model):
 
     def __str__(self):
         return f"{self.teacher.first_name} {self.teacher.last_name}"
-        
+
+
