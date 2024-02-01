@@ -224,3 +224,91 @@ def crt_clss(request):
     else:
             res = {"status": "You have not access:("}
     return Response(res)
+
+
+@api_view(["PUT"])
+def upd_clss(request, id):
+    clss = models.Cla_ss.objects.get(id=id)
+    if request.is_superuser:
+        try:
+            clss.title = request.data['title']
+            clss.teacher = models.IqroUser.objects.get(id=request.data['teacher'])
+            clss.school = models.School.objects.get(id=request.data['school_class'])
+            clss.save()
+            
+            res = {"status": "Update"}
+        except:
+                res = {'status':'Samething get wrong'}      
+    else:
+            res = {"status": "You have not access:("}
+    return Response(res)
+
+
+@api_view(["GET"])
+def del_clss(request, id):
+    clss = models.Cla_ss.objects.get(id=id)
+    if request.is_superuser:
+        try:
+            clss.delete()
+            res = {"status": "Delete"}
+        except:
+                res = {'status':'Samething get wrong'}      
+    else:
+            res = {"status": "You have not access:("}
+    return Response(res)
+
+
+@api_view(['GET'])
+def list_par(request):
+    parent = models.Parent.objects.all()
+    serializer = serializers.ListPerSer(parent, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+def crt_parnt(request):
+    if request.is_superuser:
+        try:
+            models.Parent.objects.create(
+            who = request.data['who'],
+            grf = request.data['grf'], #promis
+            phone = request.data['tel_per'],
+            )
+            res = {"status": "Create"}
+        except:
+                res = {'status':'Samething get wrong'}      
+    else:
+            res = {"status": "You have not access:("}
+    return Response(res)
+
+
+@api_view(["PUT"])
+def upd_par(request, id):
+    par = models.Parent.objects.get(id=id)
+    if request.is_superuser:
+        try:
+            par.who = request.data['who']
+            par.grf = request.data['grf']#promis
+            par.phone = request.data['tel_per']
+            par.save()
+            
+            res = {"status": "Update"}
+        except:
+                res = {'status':'Samething get wrong'}      
+    else:
+            res = {"status": "You have not access:("}
+    return Response(res)
+
+
+@api_view(["GET"])
+def d_par(request, id):
+    par = models.Parent.objects.get(id=id)
+    if request.is_superuser:
+        try:
+            par.delete()
+            res = {"status": "Delete"}
+        except:
+                res = {'status':'Samething get wrong'}      
+    else:
+            res = {"status": "You have not access:("}
+    return Response(res)

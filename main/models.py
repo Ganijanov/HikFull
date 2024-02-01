@@ -91,17 +91,11 @@ class Cla_ss(models.Model):
     def __str__(self):
         return self.title
 
-
-class PayHis(models.Model):
-    pass
-
-
-
+    
 class Parent(models.Model):
     who = models.CharField(max_length=255)
-    grf = models.IntegerField()
+    grf = models.IntegerField()#promis
     phone = models.CharField(max_length=255)
-    chek = models.ForeignKey(PayHis, on_delete=models.CASCADE, related_name='payhis')
     
     def __str__(self):
         return self.who
@@ -115,10 +109,24 @@ class Pupil(models.Model):
     finger_id = models.CharField(max_length=255, unique=True)
     telegram = models.CharField(max_length=255)
     school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="school_pupil")
-    parent = models.ForeignKey(Parent, on_delete=models.SET_NULL, related_name="parent")
+    parent = models.ForeignKey(Parent, on_delete=models.SET_NULL, related_name="parent", null= True, blank=True)
 
     def __str__(self):
         return f"{self.f_name} {self.l_name}"
+
+
+class PayHis(models.Model):
+    parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name='payhis')
+    pupil = models.ForeignKey(Pupil, on_delete=models.CASCADE, related_name="pupil_chek")
+    summa = models.IntegerField()
+    paymon = models.CharField(max_length=255)
+    salesum = models.IntegerField(null=True, blank=True)
+    aboutsale = models.CharField(max_length=255, null=True, blank=True)
+    date = models.DateField(auto_now_add=True)
+    status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.parent
     
 
 class Finger_Print(models.Model):
@@ -143,7 +151,7 @@ class Monitoring(models.Model):
     file = models.FileField(upload_to='monitoring_files/')
     
     def __str__(self):
-        return f"{self.pupil} - {self.subject} - {self.cla_ssW}"
+        return f"{self.pupil} - {self.subject} - {self.cla_ss}"
 
 
 class Table(models.Model):

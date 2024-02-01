@@ -23,3 +23,9 @@ class ClasSer(serializers.ModelSerializer):
     class Meta:
         model = models.Cla_ss
         fields = "__all__"
+
+
+class ListPerSer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Parent
+        fields = "__all__"
