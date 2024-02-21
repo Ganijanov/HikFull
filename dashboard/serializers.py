@@ -29,3 +29,17 @@ class ListPerSer(serializers.ModelSerializer):
     class Meta:
         model = models.Parent
         fields = "__all__"
+
+
+
+class ListPupSer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Pupil
+        fields = "__all__"
+
+
+class ListPaySer(serializers.ModelSerializer):
+    class Meta:
+        model = models.PayHis
+        fields = "__all__"
+

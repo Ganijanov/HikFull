@@ -23,4 +23,12 @@ urlpatterns = [
     path('crt/parent/', views.crt_parnt),
     path('upg/parent/<int:id>', views.upd_par),
     path('del/parent/<int:id>', views.d_par),
+    path('pupil/list/', views.puplist, name='pupil-list'),
+    path('pupil/create/', views.crt_pup, name='create-pupil'),
+    path('pupil/update/<int:id>/', views.upd_pup, name='update-pupil'),
+    path('pupil/delete/<int:id>/', views.dlt_pup, name='delete-pupil'),
+    path('-yadfa/list/', views.yadlist, name='payhis-list'),
+    path('-yadfa/create/', views.ayadfa_tar, name='create-payhis'),
+    path('-yadfa/update/<int:id>/', views.uayadfa_tar, name='update-payhis'),
+    path('-yadfa/delete/<int:id>/', views.dayadfa_tar, name='delete-payhis'),
 ]

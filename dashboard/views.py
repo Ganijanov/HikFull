@@ -26,7 +26,7 @@ def crt_schl(request):
             )
             res = {'status':'Created school'}
         except:
-            res = {'status':'Samething get wrong'}
+            res = {'status':'Something went wrong'}
     else:
         res = {'status':'You have not access:('}
     return Response(res)
@@ -44,7 +44,7 @@ def upd_schl(request, id):
             school.save()
             res = {'status':'Updated school'}
         except:
-            res = {'status':'Samething get wrong'}
+            res = {'status':'Something went wrong'}
     else:
         res = {'status':'You have not access:('}
     return Response(res)
@@ -58,7 +58,7 @@ def d_schl(request, id):
             school.delete()
             res = {'status':'Deleted school'}
         except:
-            res = {'status':'Samething get wrong'}
+            res = {'status':'Something went wrong'}
     else:
         res = {'status':'You have not access:('}
     return Response(res)
@@ -81,7 +81,7 @@ def cr_sbjct(request):
             )
             res = {'status':'Created Subject'}
         except:
-            res = {'status':'Samething get wrong'}
+            res = {'status':'Something went wrong'}
     else:
         res = {'status':'You have not access:('}
     return Response(res)
@@ -98,7 +98,7 @@ def upd_sbjct(request, id):
 
             res = {'status':'Updated Subject'}
         except:
-            res = {'status':'Samething get wrong'}
+            res = {'status':'Something went wrong'}
     else:
         res = {'status':'You have not access:('}
     return Response(res)
@@ -112,7 +112,7 @@ def del_sub(request, id):
             subject.delete()
             res = {'status':'Delated Subject'}
         except:
-            res = {'status':'Samething get wrong'}
+            res = {'status':'Something went wrong'}
     else:
         res = {'status':'You have not access:('}
     return Response(res)
@@ -151,7 +151,7 @@ def create_user(request):
             )
             res = {'status':'Created'}
         except:
-            res = {'status':'Samething get wrong'}
+            res = {'status':'Something went wrong'}
     else:
         res = {'status':'You have not access:('}
     return Response(res)
@@ -182,7 +182,7 @@ def upgruser(request, id):
             user.save()
             res = {'status':'Updated'}
         except:
-            res = {'status':'Samething get wrong'}
+            res = {'status':'Something went wrong'}
     else:
         res = {'status':'You have not access:('}
     return Response(res)
@@ -198,7 +198,7 @@ def del_user(request, id):
         else:
             res = {"status": "You have not access:("}
     except:
-            res = {'status':'Samething get wrong'}      
+            res = {'status':'Something went wrong'}      
     return Response(res)
 
 
@@ -220,7 +220,7 @@ def crt_clss(request):
             )
             res = {"status": "Create"}
         except:
-                res = {'status':'Samething get wrong'}      
+                res = {'status':'Something went wrong'}      
     else:
             res = {"status": "You have not access:("}
     return Response(res)
@@ -238,7 +238,7 @@ def upd_clss(request, id):
             
             res = {"status": "Update"}
         except:
-                res = {'status':'Samething get wrong'}      
+                res = {'status':'Something went wrong'}      
     else:
             res = {"status": "You have not access:("}
     return Response(res)
@@ -252,7 +252,7 @@ def del_clss(request, id):
             clss.delete()
             res = {"status": "Delete"}
         except:
-                res = {'status':'Samething get wrong'}      
+                res = {'status':'Something went wrong'}      
     else:
             res = {"status": "You have not access:("}
     return Response(res)
@@ -276,7 +276,7 @@ def crt_parnt(request):
             )
             res = {"status": "Create"}
         except:
-                res = {'status':'Samething get wrong'}      
+                res = {'status':'Something went wrong'}      
     else:
             res = {"status": "You have not access:("}
     return Response(res)
@@ -294,7 +294,7 @@ def upd_par(request, id):
             
             res = {"status": "Update"}
         except:
-                res = {'status':'Samething get wrong'}      
+                res = {'status':'Something went wrong'}      
     else:
             res = {"status": "You have not access:("}
     return Response(res)
@@ -308,7 +308,145 @@ def d_par(request, id):
             par.delete()
             res = {"status": "Delete"}
         except:
-                res = {'status':'Samething get wrong'}      
+                res = {'status':'Something went wrong'}      
     else:
             res = {"status": "You have not access:("}
     return Response(res)
+
+
+@api_view(['GET'])
+def puplist(request):
+    pupil = models.Pupil.objects.all()
+    serializer = serializers.ListPupSer(pupil, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+def crt_pup(request):
+    if request.is_superuser:
+        try:
+            models.Pupil.objects.create(
+                f_name = request.data['f_name'],
+                s_name = request.data['s_name'],
+                l_name = request.data['l_name'],
+                cla_ss = models.Cla_ss.objects.get(id=request.data['cla_ss_id']),
+                finger_id = request.data['finger_id'],
+                telegram = request.data['telegram'],
+                school = models.School.objects.get(id=request.data['school_id']),
+                parent = request.data['parent'],
+            )
+            res = {"status": "Create"}
+        except:
+                res = {'status':'Something went wrong'}      
+    else:
+            res = {"status": "You have not access:("}
+    return Response(res)
+
+
+@api_view(["PUT"])
+def upd_pup(request, id):
+    if request.is_superuser:
+        try:
+            pupl = models.Pupil.objects.get(id=id)
+            pupl.f_name = request.data['f_name']
+            pupl.s_name = request.data['s_name']
+            pupl.l_name = request.data['l_name']
+            pupl.cla_ss = models.Cla_ss.objects.get(id=request.data['cla_ss_id'])
+            pupl.finger_id = request.data['finger_id']
+            pupl.telegram = request.data['telegram']
+            pupl.school = models.School.objects.get(id=request.data['school_id'])
+            pupl.parent = request.data['parent']
+            pupl.save()
+            
+            res = {"status": "Update"}
+        except:
+                res = {'status':'Something went wrong'}      
+    else:
+            res = {"status": "You have not access:("}
+    return Response(res)
+
+
+def dlt_pup(request, id):
+    if request.is_superuser:
+        try:
+            pupl = models.Pupil.objects.get(id=id)
+            pupl.delete()
+            
+            res = {"status": "Delete"}
+        except:
+                res = {'status':'Something went wrong'}      
+    else:
+            res = {"status": "You have not access:("}
+    return Response(res)
+
+
+@api_view(['GET'])
+def yadlist(request):
+    yadfa = models.PayHis.objects.all()
+    serializer = serializers.ListPaySer(yadfa, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+def ayadfa_tar(request):
+    if request.is_superuser:
+        try:
+            models.Pupil.objects.create(
+                parent = models.Parent.objects.get(id=request.data['parent_id']),
+                pupil = models.Pupil.objects.get(id=request.data['pupil_id']),
+                summa = request.data['summa'],
+                paymon = request.data['paymon'],
+                salesum = request.data['salesum'],
+                aboutsale = request.data['aboutsale'],
+                date = request.data['date'],
+                status = request.data['status'],
+            )
+            res = {"status": "Create"}
+        except:
+                res = {'status':'Something went wrong'}      
+    else:
+            res = {"status": "You have not access:("}
+    return Response(res)
+
+
+@api_view(["PUT"])
+def uayadfa_tar(request, id):
+    if request.user.is_superuser:
+        try:
+            pay = models.PayHis.objects.get(id = id)
+            pay.parent = models.Parent.objects.get(id=request.data['parent_id'])
+            pay.pupil = models.Pupil.objects.get(id=request.data['pupil_id'])
+            pay.summa = request.data['summa']
+            pay.paymon = request.data['paymon']
+            pay.salesum = request.data['salesum']
+            pay.aboutsale = request.data['aboutsale']
+            pay.date = request.data['date']
+            pay.status = request.data['status']
+            pay.save()
+            
+            res = {"status": "Update"}
+        except models.Pupil.DoesNotExist:
+            res = {"status": "Pupil does not exist"}
+    else:
+        res = {"status": "You do not have access"}
+    return Response(res)
+
+
+@api_view(["GET"])
+def dayadfa_tar(request, id):
+    if request.user.is_superuser:
+        try:
+            pay = models.PayHis.objects.get(id=id)
+            pay.delete()
+            
+            res = {"status": "Delete"}
+        except models.PayHis.DoesNotExist:
+            res = {"status": "PayHis does not exist"}
+    else:
+        res = {"status": "You do not have access"}
+    return Response(res)
+
+
+
+
+
