@@ -28,7 +28,7 @@ def crt_schl(request):
         except:
             res = {'status':'Something went wrong'}
     else:
-        res = {'status':'You have not access:('}
+        res = {'status':"You don't have permission:("}
     return Response(res)
 
 
@@ -46,7 +46,7 @@ def upd_schl(request, id):
         except:
             res = {'status':'Something went wrong'}
     else:
-        res = {'status':'You have not access:('}
+        res = {'status':"You don't have permission:("}
     return Response(res)
 
 
@@ -60,7 +60,7 @@ def d_schl(request, id):
         except:
             res = {'status':'Something went wrong'}
     else:
-        res = {'status':'You have not access:('}
+        res = {'status':"You don't have permission:("}
     return Response(res)
 
 
@@ -83,7 +83,7 @@ def cr_sbjct(request):
         except:
             res = {'status':'Something went wrong'}
     else:
-        res = {'status':'You have not access:('}
+        res = {"status':'You don't have permission:("}
     return Response(res)
 
 
@@ -100,7 +100,7 @@ def upd_sbjct(request, id):
         except:
             res = {'status':'Something went wrong'}
     else:
-        res = {'status':'You have not access:('}
+        res = {"status':'You don't have permission:("}
     return Response(res)
 
 
@@ -114,7 +114,7 @@ def del_sub(request, id):
         except:
             res = {'status':'Something went wrong'}
     else:
-        res = {'status':'You have not access:('}
+        res = {'status':"You don't have permission:("}
     return Response(res)
 
     
@@ -153,7 +153,7 @@ def create_user(request):
         except:
             res = {'status':'Something went wrong'}
     else:
-        res = {'status':'You have not access:('}
+        res = {'status':"You don't have permission:("}
     return Response(res)
 
 
@@ -184,7 +184,7 @@ def upgruser(request, id):
         except:
             res = {'status':'Something went wrong'}
     else:
-        res = {'status':'You have not access:('}
+        res = {'status':"You don't have permission:("}
     return Response(res)
 
 
@@ -196,7 +196,7 @@ def del_user(request, id):
             user.delete()
             res = {"status": "delated"}
         else:
-            res = {"status": "You have not access:("}
+            res = {"status": "You don't have permission:("}
     except:
             res = {'status':'Something went wrong'}      
     return Response(res)
@@ -222,7 +222,7 @@ def crt_clss(request):
         except:
                 res = {'status':'Something went wrong'}      
     else:
-            res = {"status": "You have not access:("}
+            res = {"status": "You don't have permission:("}
     return Response(res)
 
 
@@ -240,7 +240,7 @@ def upd_clss(request, id):
         except:
                 res = {'status':'Something went wrong'}      
     else:
-            res = {"status": "You have not access:("}
+            res = {"status": "You don't have permission:("}
     return Response(res)
 
 
@@ -254,7 +254,7 @@ def del_clss(request, id):
         except:
                 res = {'status':'Something went wrong'}      
     else:
-            res = {"status": "You have not access:("}
+            res = {"status": "You don't have permission:("}
     return Response(res)
 
 
@@ -278,7 +278,7 @@ def crt_parnt(request):
         except:
                 res = {'status':'Something went wrong'}      
     else:
-            res = {"status": "You have not access:("}
+            res = {"status": "You don't have permission:("}
     return Response(res)
 
 
@@ -296,7 +296,7 @@ def upd_par(request, id):
         except:
                 res = {'status':'Something went wrong'}      
     else:
-            res = {"status": "You have not access:("}
+            res = {"status": "You don't have permission:("}
     return Response(res)
 
 
@@ -310,7 +310,7 @@ def d_par(request, id):
         except:
                 res = {'status':'Something went wrong'}      
     else:
-            res = {"status": "You have not access:("}
+            res = {"status": "You don't have permission:("}
     return Response(res)
 
 
@@ -339,7 +339,7 @@ def crt_pup(request):
         except:
                 res = {'status':'Something went wrong'}      
     else:
-            res = {"status": "You have not access:("}
+            res = {"status": "You don't have permission:("}
     return Response(res)
 
 
@@ -362,7 +362,7 @@ def upd_pup(request, id):
         except:
                 res = {'status':'Something went wrong'}      
     else:
-            res = {"status": "You have not access:("}
+            res = {"status": "You don't have permission:("}
     return Response(res)
 
 
@@ -376,7 +376,7 @@ def dlt_pup(request, id):
         except:
                 res = {'status':'Something went wrong'}      
     else:
-            res = {"status": "You have not access:("}
+            res = {"status": "You don't have permission:("}
     return Response(res)
 
 
@@ -391,21 +391,18 @@ def yadlist(request):
 def ayadfa_tar(request):
     if request.is_superuser:
         try:
-            models.Pupil.objects.create(
+            models.PayHis.objects.create(
                 parent = models.Parent.objects.get(id=request.data['parent_id']),
                 pupil = models.Pupil.objects.get(id=request.data['pupil_id']),
                 summa = request.data['summa'],
                 paymon = request.data['paymon'],
-                salesum = request.data['salesum'],
-                aboutsale = request.data['aboutsale'],
-                date = request.data['date'],
-                status = request.data['status'],
+               
             )
             res = {"status": "Create"}
         except:
                 res = {'status':'Something went wrong'}      
     else:
-            res = {"status": "You have not access:("}
+            res = {"status": "You don't have permission:("}
     return Response(res)
 
 
@@ -418,14 +415,10 @@ def uayadfa_tar(request, id):
             pay.pupil = models.Pupil.objects.get(id=request.data['pupil_id'])
             pay.summa = request.data['summa']
             pay.paymon = request.data['paymon']
-            pay.salesum = request.data['salesum']
-            pay.aboutsale = request.data['aboutsale']
-            pay.date = request.data['date']
-            pay.status = request.data['status']
             pay.save()
             
             res = {"status": "Update"}
-        except models.Pupil.DoesNotExist:
+        except models.PayHis.DoesNotExist:
             res = {"status": "Pupil does not exist"}
     else:
         res = {"status": "You do not have access"}
@@ -448,5 +441,202 @@ def dayadfa_tar(request, id):
 
 
 
+@api_view(['GET'])
+def saleLis(request):
+    sl = models.SaleHis.objects.all()
+    serializer = serializers.SaleHisList(sl, many=True)
+    return Response(serializer.data)
 
 
+@api_view(["POST"])
+def salc(request):
+    if request.is_superuser:
+        try:
+            models.SaleHis.objects.create(
+                payhis = models.PayHis.objects.get(id= request.data['payhis_id']), 
+                salesum = request.data['salesum'],
+                aboutsale = request.data['aboutsale'],
+                date = request.data['date'],
+                status = request.data['status'],
+                forwhat = request.data['forwhat'],
+               
+            )
+            res = {"status": "Create"}
+        except:
+                res = {'status':'Something went wrong'}      
+    else:
+            res = {"status": "You don't have permission:("}
+    return Response(res)
+
+
+@api_view(["PUT"])
+def salhisupd(request, id):
+    if request.user.is_superuser:
+        try:
+            salhis = models.SaleHis.objects.get(id=id), 
+            salhis.salesum = request.data['salesum'],
+            salhis.aboutsale = request.data['aboutsale'],
+            salhis.date = request.data['date'],
+            salhis.status = request.data['status'],
+            salhis.forwhat = request.data['forwhat'],
+               
+            
+            res = {"status": "Update"}
+        except models.SaleHis.DoesNotExist:
+            res = {"status": "Pupil does not exist"}
+    else:
+        res = {"status": "You do not have access"}
+    return Response(res)
+
+
+@api_view(["GET"])
+def dsalhis(request, id):
+    if request.user.is_superuser:
+        try:
+            pay = models.PayHis.objects.get(id=id)
+            pay.delete()
+            
+            res = {"status": "Delete"}
+        except models.PayHis.DoesNotExist:
+            res = {"status": "PayHis does not exist"}
+    else:
+        res = {"status": "You do not have access"}
+    return Response(res)
+
+
+@api_view(["GET"])
+def liss(request):
+    sl = models.SalHis.objects.all()
+    serializer = serializers.SalHisList(sl, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+def scrt(request):
+    if request.is_superuser:
+        try:
+            models.SalHis.objects.create(
+                per = models.IqroUser.objects.get(id=request.data['person_id']),
+                sal = request.data['allsal'],
+                plast = request.data['plastik'],
+                cash = request.data['cash'],
+                shtrf = request.data['shtraf'],
+                bonus = request.data['bonus'],
+                periud = request.data['periud'],
+                date = request.data['date'],
+            )
+            res = {"status": "Create"}
+        except:
+                res = {'status':'Something went wrong'}      
+    else:
+            res = {"status": "You don't have permission:("}
+    return Response(res)
+     
+
+@api_view(["PUT"])
+def supd(request, id):
+    if request.is_superuser:
+        try:
+            sal = models.SalHis.objects.get(id=id)
+            sal.per = models.IqroUser.objects.get(id=request.data['person_id'])
+            sal.sal = request.data['allsal']
+            sal.plast = request.data['plastik']
+            sal.cash = request.data['cash']
+            sal.shtrf = request.data['shtraf']
+            sal.bonus = request.data['bonus']
+            sal.periud = request.data['periud']
+            sal.date = request.data['date']
+            sal.save()
+            
+            res = {"status": "Update"}
+        except:
+                res = {'status':'Something went wrong'}      
+    else:
+            res = {"status": "You don't have permission:("}
+    return Response(res)
+
+
+@api_view(["GET"])
+def sdel(request, id):
+    if request.user.is_superuser:
+        try:
+            pay = models.SalHis.objects.get(id=id)
+            pay.delete()
+            
+            res = {"status": "Deleted"}
+        except models.PayHis.DoesNotExist:
+            res = {"status": "PayHis does not exist"}
+    else:
+        res = {"status": "You do not have access"}
+    return Response(res)
+
+
+
+@api_view(["GET"])
+def lisq(request):
+    sl = models.Chiq.objects.all()
+    serializer = serializers.ChiqLsSer(sl, many=True)
+    return Response(serializer.data)
+
+
+
+@api_view(["POST"])
+def chiq_crt(request):
+    if request.is_superuser:
+        try:
+            models.Chiq.objects.create(
+                oziqo = request.data['oziqo'], 
+                about = request.data['about'],
+                tpe = request.data['tpe'],
+                per = request.data['per'],
+            )
+            res = {"status": "Created"}
+        except:
+                res = {'status':'Something went wrong'}      
+    else:
+            res = {"status": "You don't have permission:("}
+    return Response(res)
+     
+
+@api_view(["PUT"])
+def chupd(request, id):
+    if request.is_superuser:
+        try:
+            sal = models.Chiq.objects.get(id=id)
+            sal.oziqo = request.data['oziqo'], 
+            sal.about = request.data['about'],
+            sal.tpe = request.data['tpe'],
+            sal.per = request.data['per'],
+                
+            sal.save()
+            
+            res = {"status": "Updated"}
+        except:
+                res = {'status':'Something went wrong'}      
+    else:
+            res = {"status": "You don't have permission:("}
+    return Response(res)
+
+
+@api_view(["GET"])
+def chdel(request, id):
+    if request.user.is_superuser:
+        try:
+            pay = models.Chiq.objects.get(id=id)
+            pay.delete()
+            
+            res = {"status": "Deleted"}
+        except models.PayHis.DoesNotExist:
+            res = {"status": "PayHis does not exist"}
+    else:
+        res = {"status": "You do not have access"}
+    return Response(res)
+
+
+
+# class Chiq(models.Model):
+#     oziqo = models.IntegerField()
+#     about = models.TextField()
+#     tpe = models.SmallIntegerField(choices=(( 1,"Oziq ovqat"),(2,'Xojalik'),(3,'Avtobus'),(4,'Arenda'),(5,'Konstovar'),(6,'Academik'),(7,'Boshqa'),(8, 'Oylik')))
+#     per = models.DateTimeField(auto_now_add=True)
+    

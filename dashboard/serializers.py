@@ -42,4 +42,25 @@ class ListPaySer(serializers.ModelSerializer):
     class Meta:
         model = models.PayHis
         fields = "__all__"
+        
+
+class SaleHisList(serializers.ModelSerializer):
+    class Meta:
+        model = models.SaleHis
+        fields = "__all__"
+        
+
+class SalHisList(serializers.ModelSerializer):
+    class Meta:
+        model = models.SalHis
+        fields = "__all__"
+        
+
+class ChiqLsSer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Chiq
+        fields = "__all__"
+
+
+
 
