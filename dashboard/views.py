@@ -6,6 +6,9 @@ from . import serializers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views import View
+
 
 @api_view(['GET'])
 def list_school(request):
@@ -632,11 +635,82 @@ def chdel(request, id):
         res = {"status": "You do not have access"}
     return Response(res)
 
+class BudgetView(View):
+    def get(self, request):
+        incomes = models.Income.objects.all()
+        expenses = models.Expense.objects.all()
+        total_income = sum(income.amount for income in incomes)
+        total_expense = sum(expense.amount for expense in expenses)
+        balance = total_income - total_expense
+
+        context = {
+            'incomes': incomes,
+            'expenses': expenses,
+            'total_income': total_income,
+            'total_expense': total_expense,
+            'balance': balance,
+        }
+        return render(request, 'budget/budget_summary.html', context)
 
 
-# class Chiq(models.Model):
-#     oziqo = models.IntegerField()
-#     about = models.TextField()
-#     tpe = models.SmallIntegerField(choices=(( 1,"Oziq ovqat"),(2,'Xojalik'),(3,'Avtobus'),(4,'Arenda'),(5,'Konstovar'),(6,'Academik'),(7,'Boshqa'),(8, 'Oylik')))
-#     per = models.DateTimeField(auto_now_add=True)
-    
+# View для создания записи о доходах
+class AddIncomeView(View):
+    def get(self, request):
+        return render(request, 'budget/add_income.html')
+
+    def post(self, request):
+        title = request.POST.get('title')
+        amount = request.POST.get('amount')
+        description = request.POST.get('description')
+
+        models.Income.objects.create(title=title, amount=amount, description=description)
+        return redirect('budget_summary')
+
+
+# View для создания записи о расходах
+class AddExpenseView(View):
+    def get(self, request):
+        return render(request, 'budget/add_expense.html')
+
+    def post(self, request):
+        title = request.POST.get('title')
+        amount = request.POST.get('amount')
+        description = request.POST.get('description')
+
+        models.Expense.objects.create(title=title, amount=amount, description=description)
+        return redirect('budget_summary')
+
+# View для отображения истории платежей
+class PaymentHistoryView(View):
+    def get(self, request):
+        payments = models.PayHis.objects.all()
+        context = {
+            'payments': payments
+        }
+        return render(request, 'budget/payment_history.html', context)
+
+
+# View для добавления новой записи в PayHis
+class AddPaymentView(View):
+    def get(self, request):
+        return render(request, 'budget/add_payment.html')
+
+    def post(self, request):
+        parent_id = request.POST.get('parent_id')
+        pupil_id = request.POST.get('pupil_id')
+        summa = request.POST.get('summa')
+        paymon = request.POST.get('paymon')
+        salesum = request.POST.get('salesum')
+        aboutsale = request.POST.get('aboutsale')
+        status = request.POST.get('status') == 'on'
+
+        models.PayHis.objects.create(
+            parent_id=parent_id,
+            pupil_id=pupil_id,
+            summa=summa,
+            paymon=paymon,
+            salesum=salesum,
+            aboutsale=aboutsale,
+            status=status
+        )
+        return redirect('payment_history')

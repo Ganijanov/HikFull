@@ -69,14 +69,14 @@ class IqroUser(AbstractUser):
     last_name = models.CharField(max_length=255)
     s_name = models.CharField(max_length=255, blank=True, null=True)
     phone_num = models.CharField(max_length=255)
-    type = models.SmallIntegerField(choices=(( 1,"Super"),(2,'admin'),(3,'head teacher'),(4,'teacher')) )
+    typ = models.SmallIntegerField(choices=(( 1,"Super"),(2,'admin'),(3,'head teacher'),(4,'teacher'),(5,'asist'),) )
     birthday = models.DateField()
-    passport_ser = models.CharField(max_length=255, unique=True)
-    passport_JSHSHR = models.IntegerField(unique=True)
+    passport_ser = models.CharField(max_length=255, unique=True, null=True, blank=True)
+    passport_JSHSHR = models.IntegerField(unique=True,null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     subject = models.ManyToManyField(Subject, related_name='teacher', default=None)
-    finger_id = models.CharField(max_length=255, unique=True)
-    telegram = models.CharField(max_length=255)
+    # finger_id = models.CharField(max_length=255, unique=True)
+    telegram = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name} {self.school.name}'
@@ -126,7 +126,7 @@ class PayHis(models.Model):
     status = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.parent
+        return  f" {self.parent}, {self.pupil}"
     
 
 class Finger_Print(models.Model):
@@ -186,4 +186,29 @@ class AboutTeacher(models.Model):
     def __str__(self):
         return f"{self.teacher.first_name} {self.teacher.last_name}"
 
+class Budget(models.Model):
+    amount = models.DecimalField()
+    
+    def __str__(self):
+        return f"Balance {self.amount}"
+    
+    
+class Income(models.Model):
+    title = models.CharField(max_length=255)
+    amount = models.DecimalField(max_digits=10, decimal_places=3)
+    date = models.DateField(auto_now_add=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Income: {self.title} - {self.amount}"
+
+
+class Expense(models.Model):
+    title = models.CharField(max_length=255)
+    amount = models.DecimalField(max_digits=10, decimal_places=3)
+    date = models.DateField(auto_now_add=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Expense: {self.title} - {self.amount}"
 

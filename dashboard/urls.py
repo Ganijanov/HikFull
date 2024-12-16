@@ -39,4 +39,12 @@ urlpatterns = [
     path('ch/create/', views.chiq_crt, name='create-chiq'),
     path('ch/update/<int:id>/', views.chupd, name='update-chiq'),
     path('ch/delete/<int:id>/', views.chdel, name='delete-chiq'),
+    #new era
+    path('home', views.BudgetView.as_view(), name='budget_summary'),
+    path('add-income/', views.AddIncomeView.as_view(), name='add_income'),
+    path('add-expense/', views.AddExpenseView.as_view(), name='add_expense'),
+    path('payment-history/', views.PaymentHistoryView.as_view(), name='payment_history'),
+    path('add-payment/', views.AddPaymentView.as_view(), name='add_payment'),
+
+
 ]
