@@ -10,5 +10,10 @@ admin.site.register(models.LessonTime)
 admin.site.register(models.Table)
 admin.site.register(models.Monitoring)
 admin.site.register(models.Pupil)
+admin.site.register(models.AdminUser)
+admin.site.register(models.Income)
+admin.site.register(models.Expense)
+admin.site.register(models.School)
+admin.site.register(models.PayHis)
 
 

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
     'bot.apps.BotConfig',
+    'dashboard.apps.DashboardConfig',
     'rest_framework',
 ]
 
@@ -57,7 +58,7 @@ ROOT_URLCONF = 'Config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,6 +73,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Config.wsgi.application'
 AUTH_USER_MODEL = 'main.AdminUser'
+
+
 
 
 # Database
@@ -119,7 +122,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',  # Убедитесь, что папка 'static' существует в вашем проекте
+]
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media/"
 

@@ -116,7 +116,7 @@ class Pupil(models.Model):
 
 
 class PayHis(models.Model):
-    parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name='payhis')
+    payer = models.CharField(max_length=250)
     pupil = models.ForeignKey(Pupil, on_delete=models.CASCADE, related_name="pupil_chek")
     summa = models.IntegerField()
     paymon = models.CharField(max_length=255)
@@ -126,7 +126,7 @@ class PayHis(models.Model):
     status = models.BooleanField(default=False)
 
     def __str__(self):
-        return  f" {self.parent}, {self.pupil}"
+        return  f" {self.payer}, {self.pupil}"
     
 
 class Finger_Print(models.Model):
@@ -187,7 +187,7 @@ class AboutTeacher(models.Model):
         return f"{self.teacher.first_name} {self.teacher.last_name}"
 
 class Budget(models.Model):
-    amount = models.DecimalField()
+    amount = models.DecimalField(max_digits=15, decimal_places=3)
     
     def __str__(self):
         return f"Balance {self.amount}"
@@ -198,6 +198,7 @@ class Income(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=3)
     date = models.DateField(auto_now_add=True)
     description = models.TextField(blank=True, null=True)
+    status = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Income: {self.title} - {self.amount}"
@@ -208,6 +209,7 @@ class Expense(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=3)
     date = models.DateField(auto_now_add=True)
     description = models.TextField(blank=True, null=True)
+    status = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Expense: {self.title} - {self.amount}"
