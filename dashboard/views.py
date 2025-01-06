@@ -87,7 +87,7 @@ class AddPaymentView(View):
         salesum = request.POST.get('salesum')
         aboutsale = request.POST.get('aboutsale')
         status = True if request.POST.get('status') is not None else False
-
+        
         PayHis.objects.create(
             payer=parent_id,
             pupil_id=pupil_id,
